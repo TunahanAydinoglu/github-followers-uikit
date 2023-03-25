@@ -18,6 +18,7 @@ class FollowerListVC: UIViewController {
   var filteredFollowers: [Follower] = []
   var page: Int = 1
   var isLastPage = false
+  var isSearching: Bool { !filteredFollowers.isEmpty }
   
   var collectionView: UICollectionView!
   var dataSource: UICollectionViewDiffableDataSource<Section, Follower>!
@@ -115,6 +116,17 @@ extension FollowerListVC: UICollectionViewDelegate {
       page = page + 1
       getFollowers(username: username, page: page)
     }
+  }
+
+  func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    let follower = isSearching
+    ? filteredFollowers[indexPath.item]
+    : followers[indexPath.item]
+
+    let destVc = UserInfoVC()
+    destVc.userInfo = follower
+    let navController = UINavigationController(rootViewController: destVc)
+    present(navController, animated: true)
   }
 }
 
