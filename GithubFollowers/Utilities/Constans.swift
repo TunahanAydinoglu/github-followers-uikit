@@ -18,6 +18,8 @@ enum Constants{
     // MARK: - Components
     static let ok: String = "Ok"
     static let usernamePlaceholder: String = "Enter a username"
+    static let searchPlaceholder: String = "Search for a username"
+
 
     // MARK: - Errors
     static let emptyFollowers: String = "This user doesn't have any followers. Go follow them 😃"
