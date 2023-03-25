@@ -61,7 +61,7 @@ class FollowerListVC: UIViewController {
         }
         self.followers.append(contentsOf: followers)
         if self.followers.isEmpty {
-          let message = "This user doesn't have any followers. Go follow them 😃"
+          let message = Constants.Texts.emptyFollowers
           DispatchQueue.main.async {
             self.showEmptyStateView(with: message, in: self.view)
           }
@@ -70,7 +70,7 @@ class FollowerListVC: UIViewController {
         self.updateData()
         
       case .failure(let error):
-        self.presentGFAlertOnMainThread(title: "Bad Stuff Happend", message: error.rawValue, buttonTitle: "Ok")
+        self.presentGFAlertOnMainThread(title: Constants.Texts.badStuff, message: error.rawValue, buttonTitle: Constants.Texts.ok)
       }
     }
   }

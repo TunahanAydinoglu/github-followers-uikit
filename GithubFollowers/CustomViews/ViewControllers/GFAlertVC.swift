@@ -62,7 +62,7 @@ class GFAlertVC: UIViewController {
 
   func configureTitleLabel(){
     containerView.addSubview(titleLabel)
-    titleLabel.text = alertTitle ?? "Someting went wrong"
+    titleLabel.text = alertTitle ?? Constants.Texts.smtError
 
     NSLayoutConstraint.activate([
       titleLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: padding),
@@ -87,7 +87,7 @@ class GFAlertVC: UIViewController {
 
   func configureMessageLabel(){
     containerView.addSubview(messageLabel)
-    messageLabel.text = message ?? "Unable to complete request"
+    messageLabel.text = message ?? Constants.Texts.uncompleteError
     messageLabel.numberOfLines = 4
 
     NSLayoutConstraint.activate([

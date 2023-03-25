@@ -8,11 +8,6 @@
 import UIKit
 
 class GFEmptyStateView: UIView {
-
-  private enum Constants {
-    static let emptyStateLogoName: String = "empty-state-logo"
-  }
-
   private enum Layout {
     static let messageHeight: CGFloat = 200
     static let messageLeadingAndTrailing: CGFloat = 40
@@ -49,7 +44,7 @@ class GFEmptyStateView: UIView {
     messageLabel.numberOfLines = 3
     messageLabel.textColor = .secondaryLabel
 
-    logoImageView.image = UIImage(named: Constants.emptyStateLogoName)
+    logoImageView.image = UIImage(named: Constants.Images.emptyStateLogoName)
     logoImageView.translatesAutoresizingMaskIntoConstraints = false
 
     NSLayoutConstraint.activate([
