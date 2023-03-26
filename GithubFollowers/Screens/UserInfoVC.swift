@@ -9,7 +9,7 @@ import UIKit
 
 class UserInfoVC: UIViewController {
 
-  var userInfo: Follower?
+  var userName: String = ""
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -21,7 +21,20 @@ class UserInfoVC: UIViewController {
       action: #selector(dismissVC)
     )
     navigationItem.rightBarButtonItem = doneButton
-    print(userInfo?.login ?? "empty")
+    NetworkManager.shared.getUserInfo(for: userName) { [weak self] result in
+      guard let self = self else { return }
+
+      switch result {
+      case .success(let user):
+        print(user)
+      case .failure(let error):
+        self.presentGFAlertOnMainThread(
+          title: Constants.Errors.smtError,
+          message: error.rawValue,
+          buttonTitle: Constants.Texts.ok
+        )
+      }
+    }
   }
   
   @objc func dismissVC() {

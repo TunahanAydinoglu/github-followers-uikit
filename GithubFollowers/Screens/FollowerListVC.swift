@@ -73,7 +73,7 @@ class FollowerListVC: UIViewController {
         }
         self.followers.append(contentsOf: followers)
         if self.followers.isEmpty {
-          let message = Constants.Texts.emptyFollowers
+          let message = Constants.Errors.emptyFollowers
           DispatchQueue.main.async {
             self.showEmptyStateView(with: message, in: self.view)
           }
@@ -82,7 +82,7 @@ class FollowerListVC: UIViewController {
         self.updateData(on: followers)
         
       case .failure(let error):
-        self.presentGFAlertOnMainThread(title: Constants.Texts.badStuff, message: error.rawValue, buttonTitle: Constants.Texts.ok)
+        self.presentGFAlertOnMainThread(title: Constants.Errors.badStuff, message: error.rawValue, buttonTitle: Constants.Texts.ok)
       }
     }
   }
@@ -124,7 +124,7 @@ extension FollowerListVC: UICollectionViewDelegate {
     : followers[indexPath.item]
 
     let destVc = UserInfoVC()
-    destVc.userInfo = follower
+    destVc.userName = follower.login
     let navController = UINavigationController(rootViewController: destVc)
     present(navController, animated: true)
   }

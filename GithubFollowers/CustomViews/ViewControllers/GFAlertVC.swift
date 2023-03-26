@@ -62,7 +62,7 @@ class GFAlertVC: UIViewController {
 
   func configureTitleLabel(){
     containerView.addSubview(titleLabel)
-    titleLabel.text = alertTitle ?? Constants.Texts.smtError
+    titleLabel.text = alertTitle ?? Constants.Errors.smtError
 
     NSLayoutConstraint.activate([
       titleLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: padding),
@@ -87,7 +87,7 @@ class GFAlertVC: UIViewController {
 
   func configureMessageLabel(){
     containerView.addSubview(messageLabel)
-    messageLabel.text = message ?? Constants.Texts.uncompleteError
+    messageLabel.text = message ?? Constants.Errors.uncompleteError
     messageLabel.numberOfLines = 4
 
     NSLayoutConstraint.activate([

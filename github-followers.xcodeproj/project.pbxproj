@@ -224,7 +224,6 @@
 		64DBFB7228FF32B800B102B8 /* GithubFollowers */ = {
 			isa = PBXGroup;
 			children = (
-				64C7F6AE2931416C00368970 /* Utilities */,
 				645643762911BF5100A6EB5B /* CustomViews */,
 				645643772911BFA800A6EB5B /* Extension */,
 				64DBFB8128FF32BB00B102B8 /* Info.plist */,
@@ -232,6 +231,7 @@
 				645643792911C5C500A6EB5B /* Model */,
 				645643752911BF0400A6EB5B /* Screens */,
 				645643782911BFF800A6EB5B /* Support */,
+				64C7F6AE2931416C00368970 /* Utilities */,
 			);
 			path = GithubFollowers;
 			sourceTree = "<group>";
