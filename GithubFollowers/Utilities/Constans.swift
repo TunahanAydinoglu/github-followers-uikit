@@ -12,9 +12,14 @@ enum Constants{
   enum Images {
     static let emptyStateLogoName: String = "empty-state-logo"
     static let avatarPlaceHolder: String = "avatar-placeholder"
-
+    
     // MARK: - SF Symbols
     static let locationPin: String = "mappin.and.ellipse"
+    static let folder: String = "folder"
+    static let textAlignStart = "text.alignleft"
+    static let hearthEmpty = "hearth"
+    static let personsEmpty = "person.2"
+    
   }
   
   enum Texts {
@@ -22,7 +27,11 @@ enum Constants{
     static let ok: String = "Ok"
     static let usernamePlaceholder: String = "Enter a username"
     static let searchPlaceholder: String = "Search for a username"
-
+    static let publicRepos: String = "Public Repos"
+    static let publicGists: String = "Public Gists"
+    static let followers: String = "Followers"
+    static let following: String = "Following"
+    
     // MARK: - Empty value placeholders
     static let emptyString: String = ""
     static let noLocation: String = "No Location"
