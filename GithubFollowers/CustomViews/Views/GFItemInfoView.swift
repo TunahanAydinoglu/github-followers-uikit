@@ -54,6 +54,7 @@ class GFItemInfoView: UIView {
       titleLabel.heightAnchor.constraint(equalToConstant: Layout.titleHeight),
       
       countLabel.topAnchor.constraint(equalTo: symbolImageView.bottomAnchor, constant: 4),
+      countLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
       countLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor),
       countLabel.heightAnchor.constraint(equalToConstant: Layout.titleHeight)
     ])
@@ -65,13 +66,13 @@ class GFItemInfoView: UIView {
       symbolImageView.image = UIImage(systemName: Constants.Images.folder)
       titleLabel.text = Constants.Texts.publicRepos
     case .gists:
-      symbolImageView.image = UIImage(systemName: Constants.Images.folder)
+      symbolImageView.image = UIImage(systemName: Constants.Images.textAlignStart)
       titleLabel.text = Constants.Texts.publicGists
     case .followers:
-      symbolImageView.image = UIImage(systemName: Constants.Images.folder)
+      symbolImageView.image = UIImage(systemName: Constants.Images.hearthEmpty)
       titleLabel.text = Constants.Texts.followers
     case .following:
-      symbolImageView.image = UIImage(systemName: Constants.Images.folder)
+      symbolImageView.image = UIImage(systemName: Constants.Images.personsEmpty)
       titleLabel.text = Constants.Texts.following
     }
     

@@ -51,9 +51,6 @@ class UserInfoVC: UIViewController {
       ])
     }
 
-    itemViewOne.backgroundColor = .yellow
-    itemViewTwo.backgroundColor = .blue
-
     NSLayoutConstraint.activate([
       headerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
       headerView.heightAnchor.constraint(equalToConstant: Layout.headerHeight),
@@ -88,6 +85,8 @@ extension UserInfoVC {
       case .success(let user):
         DispatchQueue.main.async {
           self.add(childVC: GFUserInfoVC(user: user), to: self.headerView)
+          self.add(childVC: GFRepoItemVC(user: user), to: self.itemViewOne)
+          self.add(childVC: GFFollowerItemVC(user: user), to: self.itemViewTwo)
         }
       case .failure(let error):
         self.presentGFAlertOnMainThread(
