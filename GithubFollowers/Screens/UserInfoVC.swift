@@ -9,15 +9,21 @@ import UIKit
 
 class UserInfoVC: UIViewController {
 
+  private enum Cons {
+    static let datePlaceholder: String = "{date}"
+  }
+  
   private enum Layout {
     static let padding: CGFloat = 20
     static let headerHeight: CGFloat = 180
     static let itemHeigh: CGFloat = 140
+    static let dateHeight: CGFloat = 18
   }
 
   private let headerView = UIView()
   private let itemViewOne = UIView()
   private let itemViewTwo = UIView()
+  private let dateLabel = GFBodyLabel(textAligment: .center)
 
   var userName: String = ""
 
@@ -40,7 +46,7 @@ class UserInfoVC: UIViewController {
   }
 
   private func layoutUI() {
-    let subViews = [headerView, itemViewOne, itemViewTwo]
+    let subViews = [headerView, itemViewOne, itemViewTwo, dateLabel]
     for itemView in subViews {
       view.addSubview(itemView)
       itemView.translatesAutoresizingMaskIntoConstraints = false
@@ -59,7 +65,10 @@ class UserInfoVC: UIViewController {
       itemViewOne.heightAnchor.constraint(equalToConstant: Layout.itemHeigh),
 
       itemViewTwo.topAnchor.constraint(equalTo: itemViewOne.bottomAnchor, constant: Layout.padding),
-      itemViewTwo.heightAnchor.constraint(equalToConstant: Layout.itemHeigh)
+      itemViewTwo.heightAnchor.constraint(equalToConstant: Layout.itemHeigh),
+
+      dateLabel.topAnchor.constraint(equalTo: itemViewTwo.bottomAnchor, constant: Layout.padding),
+      dateLabel.heightAnchor.constraint(equalToConstant: Layout.dateHeight)
     ])
   }
 
@@ -87,6 +96,9 @@ extension UserInfoVC {
           self.add(childVC: GFUserInfoVC(user: user), to: self.headerView)
           self.add(childVC: GFRepoItemVC(user: user), to: self.itemViewOne)
           self.add(childVC: GFFollowerItemVC(user: user), to: self.itemViewTwo)
+          self.dateLabel.text = Constants.Texts.githubSinceWithDate
+            .replacingOccurrences(of: Cons.datePlaceholder,
+                                  with: user.createdAt.convertToDisplayFormat())
         }
       case .failure(let error):
         self.presentGFAlertOnMainThread(

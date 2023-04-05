@@ -33,6 +33,7 @@ enum Constants{
     static let following: String = "Following"
     static let githubProfile: String = "Github Profile"
     static let getFollowers: String = "Get Followers"
+    static let githubSinceWithDate: String = "Github since {date}"
     
     // MARK: - Empty value placeholders
     static let emptyString: String = ""
