@@ -7,12 +7,16 @@
 
 import UIKit
 
-class UserInfoVC: UIViewController {
+protocol UserInfoVCDelegate: AnyObject {
+  func didTapGithubProfile(for user: User)
+  func didTapGetFollowers(for user: User)
+}
 
+class UserInfoVC: UIViewController {
   private enum Cons {
     static let datePlaceholder: String = "{date}"
   }
-  
+
   private enum Layout {
     static let padding: CGFloat = 20
     static let headerHeight: CGFloat = 180
@@ -26,6 +30,7 @@ class UserInfoVC: UIViewController {
   private let dateLabel = GFBodyLabel(textAligment: .center)
 
   var userName: String = ""
+  weak var delegate: FollowerListVCDelegate?
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -43,6 +48,21 @@ class UserInfoVC: UIViewController {
       action: #selector(dismissVC)
     )
     navigationItem.rightBarButtonItem = doneButton
+  }
+
+  private func configureUIElements(with user: User){
+    let repoItemVc = GFRepoItemVC(user: user)
+    repoItemVc.delegate = self
+
+    let followerItemVC = GFFollowerItemVC(user: user)
+    followerItemVC.delegate = self
+
+    self.add(childVC: repoItemVc, to: self.itemViewOne)
+    self.add(childVC: followerItemVC, to: self.itemViewTwo)
+    self.add(childVC: GFUserInfoVC(user: user), to: self.headerView)
+    self.dateLabel.text = Constants.Texts.githubSinceWithDate
+      .replacingOccurrences(of: Cons.datePlaceholder,
+                            with: user.createdAt.convertToDisplayFormat())
   }
 
   private func layoutUI() {
@@ -84,21 +104,44 @@ class UserInfoVC: UIViewController {
   }
 }
 
+extension UserInfoVC: UserInfoVCDelegate {
+  func didTapGithubProfile(for user: User) {
+    guard let url = URL(string: user.htmlUrl) else {
+      presentGFAlertOnMainThread(
+        title: Constants.Texts.invalidUrl,
+        message: Constants.Errors.userUrlNotValid,
+        buttonTitle: Constants.Texts.ok
+      )
+      return
+    }
+
+    presentSafariVC(with: url)
+  }
+
+  func didTapGetFollowers(for user: User) {
+    guard user.followers != 0 else {
+      presentGFAlertOnMainThread(
+        title: Constants.Texts.noFollowers,
+        message: Constants.Errors.emptyFollowers,
+        buttonTitle: Constants.Texts.ok
+      )
+      return
+    }
+    delegate?.didRequestFollowers(for: user.login)
+    dismissVC()
+  }
+}
+
 // MARK: Network
-extension UserInfoVC {
-  private func getUserInfo() {
+private extension UserInfoVC {
+  func getUserInfo() {
     NetworkManager.shared.getUserInfo(for: userName) { [weak self] result in
       guard let self = self else { return }
 
       switch result {
       case .success(let user):
         DispatchQueue.main.async {
-          self.add(childVC: GFUserInfoVC(user: user), to: self.headerView)
-          self.add(childVC: GFRepoItemVC(user: user), to: self.itemViewOne)
-          self.add(childVC: GFFollowerItemVC(user: user), to: self.itemViewTwo)
-          self.dateLabel.text = Constants.Texts.githubSinceWithDate
-            .replacingOccurrences(of: Cons.datePlaceholder,
-                                  with: user.createdAt.convertToDisplayFormat())
+          self.configureUIElements(with: user)
         }
       case .failure(let error):
         self.presentGFAlertOnMainThread(

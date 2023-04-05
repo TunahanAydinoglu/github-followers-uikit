@@ -34,6 +34,9 @@ enum Constants{
     static let githubProfile: String = "Github Profile"
     static let getFollowers: String = "Get Followers"
     static let githubSinceWithDate: String = "Github since {date}"
+
+    static let noFollowers: String = "No Followers"
+    static let invalidUrl: String = "Invalid URL"
     
     // MARK: - Empty value placeholders
     static let emptyString: String = ""
@@ -46,5 +49,7 @@ enum Constants{
     static let badStuff: String = "Bad Stuff Happend"
     static let smtError: String = "Someting went wrong!"
     static let uncompleteError: String = "Unable to complete request"
+
+    static let userUrlNotValid: String = "The url attached to this user is invalid"
   }
 }
