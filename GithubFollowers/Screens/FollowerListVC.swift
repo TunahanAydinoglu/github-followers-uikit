@@ -71,7 +71,6 @@ class FollowerListVC: UIViewController {
       guard let self = self else { return }
       switch result {
       case .success(let followers):
-        print("Followers.count = \(followers.count)")
         if followers.count < NetworkManager.perPageCount {
           self.isLastPage = true
         }
@@ -121,12 +120,12 @@ extension FollowerListVC: UICollectionViewDelegate {
       getFollowers(username: username, page: pageIndex)
     }
   }
-
+  
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
     let follower = isSearching
     ? filteredFollowers[indexPath.item]
     : followers[indexPath.item]
-
+    
     let destVc = UserInfoVC()
     destVc.userName = follower.login
     destVc.delegate = self
@@ -161,7 +160,10 @@ extension FollowerListVC: FollowerListVCDelegate {
     followers.removeAll()
     filteredFollowers.removeAll()
     getFollowers(username: username, page: pageIndex)
-    collectionView.setContentOffset(.zero, animated: true)
+    collectionView.setContentOffset(
+      CGPoint(x: .zero, y: -view.safeAreaInsets.top),
+      animated: true
+    )
     collectionView.layoutIfNeeded()
   }
 }
