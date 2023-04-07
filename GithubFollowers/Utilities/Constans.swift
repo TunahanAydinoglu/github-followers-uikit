@@ -24,6 +24,8 @@ enum Constants{
   
   enum Texts {
     // MARK: - Components
+    static let search: String = "Search"
+    static let favorites: String = "Favorites"
     static let ok: String = "Ok"
     static let usernamePlaceholder: String = "Enter a username"
     static let searchPlaceholder: String = "Search for a username"
@@ -34,6 +36,8 @@ enum Constants{
     static let githubProfile: String = "Github Profile"
     static let getFollowers: String = "Get Followers"
     static let githubSinceWithDate: String = "Github since {date}"
+    static let success: String = "Success!"
+    static let succeededFavorie: String = "You've successfully favorited this user 🤘🏼"
 
     static let noFollowers: String = "No Followers"
     static let invalidUrl: String = "Invalid URL"
