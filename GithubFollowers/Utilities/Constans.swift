@@ -46,6 +46,7 @@ enum Constants{
     static let emptyString: String = ""
     static let noLocation: String = "No Location"
     static let noBioAvailable: String = "No bio available"
+    static let noFavorites: String = "No Favorites!\n Add one on the followers screen."
   }
   
   enum Errors {
@@ -53,6 +54,7 @@ enum Constants{
     static let badStuff: String = "Bad Stuff Happend"
     static let smtError: String = "Someting went wrong!"
     static let uncompleteError: String = "Unable to complete request"
+    static let unableRemove: String = "Unable to remove"
 
     static let userUrlNotValid: String = "The url attached to this user is invalid"
   }
