@@ -9,15 +9,15 @@ import Foundation
 import UIKit
 
 class SearchVC: UIViewController{
-
+  
   let logoImageView = UIImageView()
   let userNameTextField = GFTextField()
   let callToActionButton = GFButton(backgroundColor: .systemGreen, title: Constants.Texts.getFollowers)
-
+  
   var isUserNameEntered: Bool {
     !(userNameTextField.text?.isEmpty ?? true)
   }
-
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     view.backgroundColor = .systemBackground
@@ -26,23 +26,22 @@ class SearchVC: UIViewController{
     configureCallToActionButton()
     createDissmissKeyboardTapGesture()
   }
-
-
+  
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
     navigationController?.setNavigationBarHidden(true, animated: true)
   }
-
+  
   func createDissmissKeyboardTapGesture(){
     let tap = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing))
     view.addGestureRecognizer(tap)
   }
-
+  
   func configureLogoImageView(){
     view.addSubview(logoImageView)
     logoImageView.translatesAutoresizingMaskIntoConstraints = false
     logoImageView.image = UIImage(named:"gh-logo")!
-
+    
     NSLayoutConstraint.activate([
       logoImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 80),
       logoImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -50,7 +49,7 @@ class SearchVC: UIViewController{
       logoImageView.widthAnchor.constraint(equalToConstant: 200)
     ])
   }
-
+  
   @objc func pushFollowerListVC(){
     guard isUserNameEntered else {
       presentGFAlertOnMainThread(
@@ -60,17 +59,17 @@ class SearchVC: UIViewController{
       )
       return
     }
-
+    
     let followerListVc = FollowerListVC()
     followerListVc.username = userNameTextField.text
     followerListVc.title = userNameTextField.text
     navigationController?.pushViewController(followerListVc, animated: true)
   }
-
+  
   func configureTextField(){
     view.addSubview(userNameTextField)
     userNameTextField.delegate = self
-
+    
     NSLayoutConstraint.activate([
       userNameTextField.topAnchor.constraint(equalTo: logoImageView.bottomAnchor, constant: 48),
       userNameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 50),
@@ -78,11 +77,11 @@ class SearchVC: UIViewController{
       userNameTextField.heightAnchor.constraint(equalToConstant: 50)
     ])
   }
-
+  
   func configureCallToActionButton(){
     view.addSubview(callToActionButton)
     callToActionButton.addTarget(self, action: #selector(pushFollowerListVC), for: .touchUpInside)
-
+    
     NSLayoutConstraint.activate([
       callToActionButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -50),
       callToActionButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 50),
@@ -91,7 +90,6 @@ class SearchVC: UIViewController{
     ])
   }
 }
-
 
 extension SearchVC: UITextFieldDelegate{
   func textFieldShouldReturn(_ textField: UITextField) -> Bool {
