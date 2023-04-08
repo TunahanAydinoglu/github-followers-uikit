@@ -74,7 +74,6 @@ class FollowerListVC: GFDataLoadingVC {
   func configureSearchController() {
     let searchController = UISearchController()
     searchController.searchResultsUpdater = self
-    searchController.searchBar.delegate = self
     searchController.searchBar.placeholder = Constants.Texts.searchPlaceholder
     searchController.obscuresBackgroundDuringPresentation = false
     navigationItem.searchController = searchController
@@ -188,12 +187,13 @@ extension FollowerListVC: UICollectionViewDelegate {
 
 extension FollowerListVC: UISearchResultsUpdating, UISearchBarDelegate {
   func updateSearchResults(for searchController: UISearchController) {
-    guard let filter = searchController.searchBar.text else { return }
-    if filter.isEmpty {
-      filteredFollowers = []
+    guard let filter = searchController.searchBar.text, !filter.isEmpty
+    else {
+      filteredFollowers.removeAll()
       updateData(on: followers)
       return
     }
+
     filteredFollowers = followers
       .filter{$0.login.lowercased().contains(filter.lowercased())}
     updateData(on: filteredFollowers)
@@ -212,10 +212,7 @@ extension FollowerListVC: FollowerListVCDelegate {
     followers.removeAll()
     filteredFollowers.removeAll()
     getFollowers(username: username, page: pageIndex)
-    collectionView.setContentOffset(
-      CGPoint(x: .zero, y: -view.safeAreaInsets.top),
-      animated: true
-    )
+    collectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .top, animated: true)
     collectionView.layoutIfNeeded()
   }
 }
