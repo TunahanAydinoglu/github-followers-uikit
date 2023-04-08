@@ -11,11 +11,10 @@ class GFEmptyStateView: UIView {
   private enum Layout {
     static let messageHeight: CGFloat = 200
     static let messageLeadingAndTrailing: CGFloat = 40
-    static let messageTop: CGFloat = 150
+    static let messageTop: CGFloat = DeviceTypes.isSmallScreen ? 80 : 150
     
-    static let logoBottom: CGFloat = 40
+    static let logoBottom: CGFloat = DeviceTypes.isSmallScreen ? 80 : 40
     static let logoTrailing: CGFloat = 170
-    
   }
   
   let messageLabel = GFTitleLabel(textAligment: .center, fontSize: 28)
@@ -43,7 +42,7 @@ class GFEmptyStateView: UIView {
     messageLabel.numberOfLines = 3
     messageLabel.textColor = .secondaryLabel
     
-    logoImageView.image = Images.emptyStateLogoName
+    logoImageView.image = Images.emptyStateLogo
     logoImageView.translatesAutoresizingMaskIntoConstraints = false
     
     NSLayoutConstraint.activate([

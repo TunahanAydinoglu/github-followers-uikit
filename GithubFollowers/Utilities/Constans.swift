@@ -38,7 +38,7 @@ enum Constants{
   }
   
   enum Errors {
-    static let emptyFollowers: String = "This user doesn't have any followers. Go follow them 😃"
+    static let emptyFollowers: String = "This user doesn't have any followers.\nGo follow them 😃"
     static let badStuff: String = "Bad Stuff Happend"
     static let smtError: String = "Someting went wrong!"
     static let uncompleteError: String = "Unable to complete request"
@@ -48,8 +48,8 @@ enum Constants{
   }
 }
 enum Images {
-  static let emptyStateLogoName = UIImage(systemName: "empty-state-logo")
-  static let avatarPlaceHolder = UIImage(systemName: "avatar-placeholder")
+  static let emptyStateLogo = UIImage(named: "empty-state-logo")
+  static let avatarPlaceholder = UIImage(named: "avatar-placeholder")
   static let githubLogo = UIImage(named:"gh-logo")
 
   // MARK: - SF Symbols
