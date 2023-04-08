@@ -29,7 +29,7 @@ class UserInfoVC: UIViewController {
   private let itemViewTwo = UIView()
   private let dateLabel = GFBodyLabel(textAligment: .center)
 
-  var userName: String = ""
+  var userName: String = Constants.Texts.emptyString
   weak var delegate: FollowerListVCDelegate?
 
   override func viewDidLoad() {

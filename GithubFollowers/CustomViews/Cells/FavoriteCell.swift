@@ -8,6 +8,7 @@
 import UIKit
 
 class FavoriteCell: UITableViewCell {
+  static let reuseId = "FavoriteCell"
   
   private enum Layout {
     static let padding: CGFloat = 12
@@ -16,8 +17,6 @@ class FavoriteCell: UITableViewCell {
     static let imageSize: CGFloat = 60
     static let spacing: CGFloat = 24
   }
-  
-  static let reuseId = "FavoriteCell"
   
   let avatarImageView = GFAvatarImageView(frame: .zero)
   let usernameLabel = GFTitleLabel(textAligment: .left, fontSize: Layout.labelFontSize)

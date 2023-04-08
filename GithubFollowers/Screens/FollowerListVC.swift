@@ -17,7 +17,7 @@ class FollowerListVC: UIViewController {
     case main
   }
   
-  var username: String!
+  var username: String = Constants.Texts.emptyString
   var followers: [Follower] = []
   var filteredFollowers: [Follower] = []
   var pageIndex: Int = 1
@@ -26,6 +26,16 @@ class FollowerListVC: UIViewController {
   
   var collectionView: UICollectionView!
   var dataSource: UICollectionViewDiffableDataSource<Section, Follower>!
+  
+  init(username: String){
+    super.init(nibName: nil, bundle: nil)
+    self.username = username
+    title = username
+  }
+  
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -111,18 +121,18 @@ class FollowerListVC: UIViewController {
     snapshot.appendItems(followers)
     DispatchQueue.main.async { self.dataSource.apply(snapshot, animatingDifferences: true) }
   }
-
+  
   @objc func addButtonTapped() {
     showLoadingView()
-
+    
     NetworkManager.shared.getUserInfo(for: username) { [weak self] result in
       guard let self = self else { return }
       self.dismissLoadingView()
-
+      
       switch result {
       case .success(let user):
         let favorite = Follower(login: user.login, avatarUrl: user.avatarUrl)
-
+        
         PersistenceManager.update(with: favorite, actionType: .add) { [weak self] err in
           guard let self = self else { return }
           if let err = err {

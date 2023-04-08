@@ -42,7 +42,7 @@ class GFUserInfoVC: UIViewController {
     bioLabel.text = user.bio ?? Constants.Texts.noBioAvailable
     bioLabel.numberOfLines = 3
 
-    locationImageView.image = UIImage(systemName: Constants.Images.locationPin)
+    locationImageView.image = Images.locationPin
     locationImageView.tintColor = .secondaryLabel
   }
 

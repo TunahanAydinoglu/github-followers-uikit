@@ -5,28 +5,15 @@
 //  Created by Tunahan Aydınoglu on 25.03.2023.
 //
 
-import Foundation
+import UIKit
 
 enum Constants{
-  
-  enum Images {
-    static let emptyStateLogoName: String = "empty-state-logo"
-    static let avatarPlaceHolder: String = "avatar-placeholder"
-    
-    // MARK: - SF Symbols
-    static let locationPin: String = "mappin.and.ellipse"
-    static let folder: String = "folder"
-    static let textAlignStart = "text.alignleft"
-    static let hearthEmpty = "hearth"
-    static let personsEmpty = "person.2"
-    
-  }
-  
   enum Texts {
     // MARK: - Components
     static let search: String = "Search"
     static let favorites: String = "Favorites"
     static let ok: String = "Ok"
+    static let emptyUsername: String = "Empty Username"
     static let usernamePlaceholder: String = "Enter a username"
     static let searchPlaceholder: String = "Search for a username"
     static let publicRepos: String = "Public Repos"
@@ -38,6 +25,7 @@ enum Constants{
     static let githubSinceWithDate: String = "Github since {date}"
     static let success: String = "Success!"
     static let succeededFavorie: String = "You've successfully favorited this user 🤘🏼"
+    static let pleaseUserName: String = "Please enter a username. We need to know who to look for 😉"
 
     static let noFollowers: String = "No Followers"
     static let invalidUrl: String = "Invalid URL"
@@ -58,4 +46,45 @@ enum Constants{
 
     static let userUrlNotValid: String = "The url attached to this user is invalid"
   }
+}
+enum Images {
+  static let emptyStateLogoName = UIImage(systemName: "empty-state-logo")
+  static let avatarPlaceHolder = UIImage(systemName: "avatar-placeholder")
+  static let githubLogo = UIImage(named:"gh-logo")
+
+  // MARK: - SF Symbols
+  static let locationPin = UIImage(systemName: "mappin.and.ellipse")
+  static let folder = UIImage(systemName: "folder")
+  static let textAlignStart = UIImage(systemName: "text.alignleft")
+  static let hearthEmpty = UIImage(systemName: "hearth")
+  static let personsEmpty = UIImage(systemName: "person.2")
+}
+
+enum ScreenSize {
+  static let width = UIScreen.main.bounds.size.width
+  static let height = UIScreen.main.bounds.size.height
+  static let maxLength = max(ScreenSize.width, ScreenSize.height)
+  static let minLength = min(ScreenSize.width, ScreenSize.height)
+}
+
+enum DeviceTypes {
+  static let idiom = UIDevice.current.userInterfaceIdiom
+  static let nativeScale = UIScreen.main.nativeScale
+  static let scale = UIScreen.main.scale
+
+  static let isiphoneSE = idiom == .phone && ScreenSize.maxLength == 568.0
+  static let isiphone8Standart = idiom == .phone && ScreenSize.maxLength == 667.0 && nativeScale == scale
+  static let isiphone8Zoomed = idiom == .phone && ScreenSize.maxLength == 667.0 && nativeScale > scale
+  static let isiphone8PlusStandart = idiom == .phone && ScreenSize.maxLength == 736.0
+  static let isiphone8PlusZoomed = idiom == .phone && ScreenSize.maxLength == 736.0 && nativeScale < scale
+  static let isiphoneX = idiom == .phone && ScreenSize.maxLength == 812.0
+  static let isiphoneXsMaxAndXr = idiom == .phone && ScreenSize.maxLength == 896.0
+  static let isiPad = idiom == .pad && ScreenSize.maxLength >= 1024.0
+  
+  static func isiPhoneXAspectRatio() -> Bool {
+    return isiphoneX || isiphoneXsMaxAndXr
+  }
+  static var isSmallScreen: Bool = {
+    isiphoneSE || isiphone8Zoomed
+  }()
 }

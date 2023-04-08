@@ -12,7 +12,7 @@ class GFAlertVC: UIViewController {
   let containerView = UIView()
   let titleLabel = GFTitleLabel(textAligment: .center, fontSize: 20)
   let messageLabel = GFBodyLabel(textAligment: .center)
-  let actionButton = GFButton(backgroundColor: .systemPink, title: "OK")
+  let actionButton = GFButton(backgroundColor: .systemPink, title: Constants.Texts.ok)
 
   var alertTitle: String?
   var message: String?
@@ -74,7 +74,7 @@ class GFAlertVC: UIViewController {
 
   func configureActionButton(){
     containerView.addSubview(actionButton)
-    actionButton.setTitle(buttonTitle ?? "OK", for: .normal)
+    actionButton.setTitle(buttonTitle ?? Constants.Texts.ok, for: .normal)
     actionButton.addTarget(self, action: #selector(dismissVC), for: .touchUpInside)
 
     NSLayoutConstraint.activate([
