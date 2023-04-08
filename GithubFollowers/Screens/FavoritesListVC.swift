@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class FavoritesListVC: UIViewController {
+class FavoritesListVC: GFDataLoadingVC {
   private enum Layout {
     static let cellHeight: CGFloat = 80
   }

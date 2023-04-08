@@ -33,7 +33,7 @@ class FavoriteCell: UITableViewCell {
   
   func set(favorite: Follower){
     usernameLabel.text = favorite.login
-    avatarImageView.downloadImage(from: favorite.avatarUrl)
+    downloadImage(avatarUrl: favorite.avatarUrl)
   }
   
   private func configure() {
@@ -54,5 +54,16 @@ class FavoriteCell: UITableViewCell {
       usernameLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -Layout.padding),
       usernameLabel.heightAnchor.constraint(equalToConstant: Layout.labelHeight)
     ])
+  }
+}
+
+private extension FavoriteCell {
+  func downloadImage(avatarUrl: String) {
+    NetworkManager.shared.downloadImage(from: avatarUrl) { [weak self] image in
+      guard let self = self else { return }
+      DispatchQueue.main.async {
+        self.avatarImageView.image = image
+      }
+    }
   }
 }
