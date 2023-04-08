@@ -16,30 +16,30 @@ class UserInfoVC: UIViewController {
   private enum Cons {
     static let datePlaceholder: String = "{date}"
   }
-
+  
   private enum Layout {
     static let padding: CGFloat = 20
     static let headerHeight: CGFloat = 180
     static let itemHeigh: CGFloat = 140
     static let dateHeight: CGFloat = 18
   }
-
+  
   private let headerView = UIView()
   private let itemViewOne = UIView()
   private let itemViewTwo = UIView()
   private let dateLabel = GFBodyLabel(textAligment: .center)
-
+  
   var userName: String = Constants.Texts.emptyString
   weak var delegate: FollowerListVCDelegate?
-
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     configureViewContoller()
     layoutUI()
-
+    
     getUserInfo()
   }
-
+  
   private func configureViewContoller() {
     view.backgroundColor = .systemBackground
     let doneButton = UIBarButtonItem(
@@ -49,49 +49,49 @@ class UserInfoVC: UIViewController {
     )
     navigationItem.rightBarButtonItem = doneButton
   }
-
+  
   private func configureUIElements(with user: User){
     let repoItemVc = GFRepoItemVC(user: user)
     repoItemVc.delegate = self
-
+    
     let followerItemVC = GFFollowerItemVC(user: user)
     followerItemVC.delegate = self
-
+    
     self.add(childVC: repoItemVc, to: self.itemViewOne)
     self.add(childVC: followerItemVC, to: self.itemViewTwo)
     self.add(childVC: GFUserInfoVC(user: user), to: self.headerView)
     self.dateLabel.text = Constants.Texts.githubSinceWithDate
       .replacingOccurrences(of: Cons.datePlaceholder,
-                            with: user.createdAt.convertToDisplayFormat())
+                            with: user.createdAt.convertToMonthYearFormat())
   }
-
+  
   private func layoutUI() {
     let subViews = [headerView, itemViewOne, itemViewTwo, dateLabel]
     for itemView in subViews {
       view.addSubview(itemView)
       itemView.translatesAutoresizingMaskIntoConstraints = false
-
+      
       NSLayoutConstraint.activate([
         itemView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Layout.padding),
         itemView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Layout.padding)
       ])
     }
-
+    
     NSLayoutConstraint.activate([
       headerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
       headerView.heightAnchor.constraint(equalToConstant: Layout.headerHeight),
-
+      
       itemViewOne.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: Layout.padding),
       itemViewOne.heightAnchor.constraint(equalToConstant: Layout.itemHeigh),
-
+      
       itemViewTwo.topAnchor.constraint(equalTo: itemViewOne.bottomAnchor, constant: Layout.padding),
       itemViewTwo.heightAnchor.constraint(equalToConstant: Layout.itemHeigh),
-
+      
       dateLabel.topAnchor.constraint(equalTo: itemViewTwo.bottomAnchor, constant: Layout.padding),
       dateLabel.heightAnchor.constraint(equalToConstant: Layout.dateHeight)
     ])
   }
-
+  
   private func add(childVC: UIViewController, to containerView: UIView) {
     addChild(childVC)
     containerView.addSubview(childVC.view)
@@ -114,10 +114,10 @@ extension UserInfoVC: UserInfoVCDelegate {
       )
       return
     }
-
+    
     presentSafariVC(with: url)
   }
-
+  
   func didTapGetFollowers(for user: User) {
     guard user.followers != 0 else {
       presentGFAlertOnMainThread(
@@ -137,7 +137,7 @@ private extension UserInfoVC {
   func getUserInfo() {
     NetworkManager.shared.getUserInfo(for: userName) { [weak self] result in
       guard let self = self else { return }
-
+      
       switch result {
       case .success(let user):
         DispatchQueue.main.async {
