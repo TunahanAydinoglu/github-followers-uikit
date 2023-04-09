@@ -48,10 +48,8 @@ class GFEmptyStateView: UIView {
     NSLayoutConstraint.activate([
       logoImageView.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 1.3),
       logoImageView.heightAnchor.constraint(equalTo: self.widthAnchor, multiplier: 1.3),
-      logoImageView.trailingAnchor.constraint(
-        equalTo: self.trailingAnchor, constant: Layout.logoTrailing),
-      logoImageView.bottomAnchor.constraint(
-        equalTo: self.bottomAnchor, constant: Layout.logoBottom)
+      logoImageView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: Layout.logoTrailing),
+      logoImageView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: Layout.logoBottom)
     ])
   }
 
@@ -61,12 +59,9 @@ class GFEmptyStateView: UIView {
     messageLabel.textColor = .secondaryLabel
 
     NSLayoutConstraint.activate([
-      messageLabel.centerYAnchor.constraint(
-        equalTo: self.centerYAnchor, constant:  -Layout.messageTop),
-      messageLabel.leadingAnchor.constraint(
-        equalTo: self.leadingAnchor, constant: Layout.messageLeadingAndTrailing),
-      messageLabel.trailingAnchor.constraint(
-        equalTo: self.trailingAnchor, constant: -Layout.messageLeadingAndTrailing),
+      messageLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant:  -Layout.messageTop),
+      messageLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: Layout.messageLeadingAndTrailing),
+      messageLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -Layout.messageLeadingAndTrailing),
       messageLabel.heightAnchor.constraint(equalToConstant: Layout.messageHeight)
     ])
   }

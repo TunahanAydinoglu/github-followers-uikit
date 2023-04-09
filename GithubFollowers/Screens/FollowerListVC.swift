@@ -47,7 +47,7 @@ class FollowerListVC: GFDataLoadingVC {
     navigationController?.setNavigationBarHidden(false, animated: true)
   }
   
-  func configureViewController() {
+  private func configureViewController() {
     view.backgroundColor = .systemBackground
     navigationController?.navigationBar.prefersLargeTitles = true
     let addButton = UIBarButtonItem(
@@ -58,7 +58,7 @@ class FollowerListVC: GFDataLoadingVC {
     navigationItem.rightBarButtonItem = addButton
   }
   
-  func configureCollectionView() {
+  private func configureCollectionView() {
     collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: UIHelper.createThreeColumnFlowLayout(in: view))
     view.addSubview(collectionView)
     collectionView.delegate = self
@@ -66,7 +66,7 @@ class FollowerListVC: GFDataLoadingVC {
     collectionView.register(FollowerCell.self, forCellWithReuseIdentifier: FollowerCell.reuseId)
   }
   
-  func configureSearchController() {
+  private func configureSearchController() {
     let searchController = UISearchController()
     searchController.searchResultsUpdater = self
     searchController.searchBar.placeholder = Constants.Texts.searchPlaceholder
@@ -74,33 +74,36 @@ class FollowerListVC: GFDataLoadingVC {
     navigationItem.searchController = searchController
   }
   
-  func getFollowers(username: String, page: Int) {
+  private func getFollowers(username: String, page: Int) {
     showLoadingView()
     NetworkManager.shared.getFollowers(for: username, page: page) { [weak self] result in
       self?.dismissLoadingView()
       guard let self = self else { return }
       switch result {
       case .success(let followers):
-        if followers.count < NetworkManager.perPageCount {
-          self.isLastPage = true
-        }
-        self.followers.append(contentsOf: followers)
-        if self.followers.isEmpty {
-          let message = Constants.Errors.emptyFollowers
-          DispatchQueue.main.async {
-            self.showEmptyStateView(with: message, in: self.view)
-          }
-          return
-        }
-        self.updateData(on: self.followers)
-        
+        self.updateUI(with: followers)
       case .failure(let error):
         self.presentGFAlertOnMainThread(title: Constants.Errors.badStuff, message: error.rawValue, buttonTitle: Constants.Texts.ok)
       }
     }
   }
+
+  private func updateUI(with followers: [Follower]) {
+    if followers.count < NetworkManager.perPageCount {
+      self.isLastPage = true
+    }
+    self.followers.append(contentsOf: followers)
+    if self.followers.isEmpty {
+      let message = Constants.Errors.emptyFollowers
+      DispatchQueue.main.async {
+        self.showEmptyStateView(with: message, in: self.view)
+      }
+      return
+    }
+    self.updateData(on: self.followers)
+  }
   
-  func configureDataSource() {
+  private func configureDataSource() {
     dataSource = UICollectionViewDiffableDataSource<Section, Follower>(
       collectionView: collectionView, cellProvider: { (collectionView, indexPath, follower) -> UICollectionViewCell? in
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FollowerCell.reuseId, for: indexPath) as! FollowerCell
@@ -109,7 +112,7 @@ class FollowerListVC: GFDataLoadingVC {
       })
   }
   
-  func updateData(on followers: [Follower]) {
+  private func updateData(on followers: [Follower]) {
     var snapshot = NSDiffableDataSourceSnapshot<Section, Follower>()
     snapshot.appendSections([.main])
     snapshot.appendItems(followers)
@@ -125,23 +128,7 @@ class FollowerListVC: GFDataLoadingVC {
       
       switch result {
       case .success(let user):
-        let favorite = Follower(login: user.login, avatarUrl: user.avatarUrl)
-        
-        PersistenceManager.update(with: favorite, actionType: .add) { [weak self] err in
-          guard let self = self else { return }
-          if let err = err {
-            self.presentGFAlertOnMainThread(
-              title: Constants.Errors.smtError,
-              message: err.rawValue,
-              buttonTitle: Constants.Texts.ok
-            )
-          }
-          self.presentGFAlertOnMainThread(
-            title: Constants.Texts.success,
-            message: Constants.Texts.succeededFavorie,
-            buttonTitle: Constants.Texts.ok
-          )
-        }
+        self.addUserToFavorites(user: user)
       case .failure(let err):
         self.presentGFAlertOnMainThread(
           title: Constants.Errors.smtError,
@@ -149,6 +136,26 @@ class FollowerListVC: GFDataLoadingVC {
           buttonTitle: Constants.Texts.ok
         )
       }
+    }
+  }
+
+  private func addUserToFavorites(user: User) {
+    let favorite = Follower(login: user.login, avatarUrl: user.avatarUrl)
+
+    PersistenceManager.update(with: favorite, actionType: .add) { [weak self] err in
+      guard let self = self else { return }
+      if let err = err {
+        self.presentGFAlertOnMainThread(
+          title: Constants.Errors.smtError,
+          message: err.rawValue,
+          buttonTitle: Constants.Texts.ok
+        )
+      }
+      self.presentGFAlertOnMainThread(
+        title: Constants.Texts.success,
+        message: Constants.Texts.succeededFavorie,
+        buttonTitle: Constants.Texts.ok
+      )
     }
   }
 }
@@ -204,6 +211,7 @@ extension FollowerListVC: UserInfoVCDelegate {
     self.username = username
     title = username
     pageIndex = 1
+    
     followers.removeAll()
     filteredFollowers.removeAll()
     getFollowers(username: username, page: pageIndex)

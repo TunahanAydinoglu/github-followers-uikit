@@ -14,7 +14,8 @@ extension UIView {
     }
   }
   
-  func pinToEdges(of superView: UIView) {
+  func pinToSuperView() {
+    guard let superView = self.superview else { return }
     translatesAutoresizingMaskIntoConstraints = false
     NSLayoutConstraint.activate([
       topAnchor.constraint(equalTo: superView.topAnchor),

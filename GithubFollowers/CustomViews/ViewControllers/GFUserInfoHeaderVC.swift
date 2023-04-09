@@ -50,7 +50,7 @@ class GFUserInfoHeaderVC: UIViewController {
   }
 
   private func configureUI() {
-    downloadImage(avatarUrl: user.avatarUrl)
+    avatarImageView.downloadImage(from: user.avatarUrl)
     userNameLabel.text = user.login
     nameLabel.text = user.name ?? Constants.Texts.emptyString
     locationLabel.text = user.location ?? Constants.Texts.noLocation
@@ -115,16 +115,5 @@ class GFUserInfoHeaderVC: UIViewController {
       bioLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
       bioLabel.heightAnchor.constraint(equalToConstant: Layout.bioLabelHeight)
     ])
-  }
-}
-
-private extension GFUserInfoHeaderVC {
-  func downloadImage(avatarUrl: String) {
-    NetworkManager.shared.downloadImage(from: avatarUrl) { [weak self] image in
-      guard let self = self else { return }
-      DispatchQueue.main.async {
-        self.avatarImageView.image = image
-      }
-    }
   }
 }

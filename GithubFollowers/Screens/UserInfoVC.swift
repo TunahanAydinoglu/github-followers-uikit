@@ -23,7 +23,7 @@ class UserInfoVC: UIViewController {
     static let dateHeight: CGFloat = 50
     static let contentHeight: CGFloat = headerHeight + 2*itemHeigh + dateHeight + 5*padding
   }
-  
+
   let scrollView = UIScrollView()
   let contentView = UIView()
   
@@ -53,14 +53,14 @@ class UserInfoVC: UIViewController {
     )
     navigationItem.rightBarButtonItem = doneButton
   }
-  
+
   private func configureScrollView() {
     view.addSubview(scrollView)
-    scrollView.pinToEdges(of: view)
-    
+    scrollView.pinToSuperView()
+
     scrollView.addSubview(contentView)
-    contentView.pinToEdges(of: scrollView)
-    
+    contentView.pinToSuperView()
+
     NSLayoutConstraint.activate([
       contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
       contentView.heightAnchor.constraint(equalToConstant: Layout.contentHeight)
@@ -143,7 +143,7 @@ extension UserInfoVC: GFFollowerItemVCDelegate {
     delegate?.didRequestFollowers(for: user.login)
     dismissVC()
   }
-}
+} 
 
 // MARK: Network
 private extension UserInfoVC {
