@@ -41,16 +41,14 @@ class FavoriteCell: UITableViewCell {
     accessoryType = .disclosureIndicator
     
     NSLayoutConstraint.activate([
-      avatarImageView.centerYAnchor.constraint(equalTo: self.centerYAnchor),
-      avatarImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: Layout.padding),
+      avatarImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
+      avatarImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Layout.padding),
       avatarImageView.heightAnchor.constraint(equalToConstant: Layout.imageSize),
       avatarImageView.widthAnchor.constraint(equalToConstant: Layout.imageSize),
       
-      usernameLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor),
-      usernameLabel.leadingAnchor.constraint(
-        equalTo: avatarImageView.trailingAnchor,
-        constant: Layout.spacing),
-      usernameLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -Layout.padding),
+      usernameLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
+      usernameLabel.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor,constant: Layout.spacing),
+      usernameLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Layout.padding),
       usernameLabel.heightAnchor.constraint(equalToConstant: Layout.labelHeight)
     ])
   }
