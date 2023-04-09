@@ -8,8 +8,7 @@
 import UIKit
 
 protocol UserInfoVCDelegate: AnyObject {
-  func didTapGithubProfile(for user: User)
-  func didTapGetFollowers(for user: User)
+  func didRequestFollowers(for username: String)
 }
 
 class UserInfoVC: UIViewController {
@@ -19,9 +18,9 @@ class UserInfoVC: UIViewController {
   
   private enum Layout {
     static let padding: CGFloat = 20
-    static let headerHeight: CGFloat = 180
+    static let headerHeight: CGFloat = 210
     static let itemHeigh: CGFloat = 140
-    static let dateHeight: CGFloat = 18
+    static let dateHeight: CGFloat = 50
   }
   
   private let headerView = UIView()
@@ -30,7 +29,7 @@ class UserInfoVC: UIViewController {
   private let dateLabel = GFBodyLabel(textAligment: .center)
   
   var userName: String = Constants.Texts.emptyString
-  weak var delegate: FollowerListVCDelegate?
+  weak var delegate: UserInfoVCDelegate?
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -51,15 +50,9 @@ class UserInfoVC: UIViewController {
   }
   
   private func configureUIElements(with user: User){
-    let repoItemVc = GFRepoItemVC(user: user)
-    repoItemVc.delegate = self
-    
-    let followerItemVC = GFFollowerItemVC(user: user)
-    followerItemVC.delegate = self
-    
-    self.add(childVC: repoItemVc, to: self.itemViewOne)
-    self.add(childVC: followerItemVC, to: self.itemViewTwo)
-    self.add(childVC: GFUserInfoVC(user: user), to: self.headerView)
+    self.add(childVC: GFRepoItemVC(user: user, delegate: self), to: self.itemViewOne)
+    self.add(childVC: GFFollowerItemVC(user: user, delegate: self), to: self.itemViewTwo)
+    self.add(childVC: GFUserInfoHeaderVC(user: user), to: self.headerView)
     self.dateLabel.text = Constants.Texts.githubSinceWithDate
       .replacingOccurrences(of: Cons.datePlaceholder,
                             with: user.createdAt.convertToMonthYearFormat())
@@ -104,7 +97,7 @@ class UserInfoVC: UIViewController {
   }
 }
 
-extension UserInfoVC: UserInfoVCDelegate {
+extension UserInfoVC: GFRepoItemVCDelegate {
   func didTapGithubProfile(for user: User) {
     guard let url = URL(string: user.htmlUrl) else {
       presentGFAlertOnMainThread(
@@ -117,7 +110,9 @@ extension UserInfoVC: UserInfoVCDelegate {
     
     presentSafariVC(with: url)
   }
-  
+}
+
+extension UserInfoVC: GFFollowerItemVCDelegate {
   func didTapGetFollowers(for user: User) {
     guard user.followers != 0 else {
       presentGFAlertOnMainThread(

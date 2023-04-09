@@ -1,5 +1,5 @@
 //
-//  GFUserInfoVC.swift
+//  GFUserInfoHeaderVC.swift
 //  github-followers
 //
 //  Created by Tunahan Aydınoglu on 2.04.2023.
@@ -7,13 +7,28 @@
 
 import UIKit
 
-class GFUserInfoVC: UIViewController {
+class GFUserInfoHeaderVC: UIViewController {
+
+  private enum Layout {
+    static let padding: CGFloat = 20
+    static let textImagePadding : CGFloat = 12
+    static let labelsFontSize: CGFloat = 18
+    static let bioLabelNumberOfLines: Int = 3
+    static let avatarImageSize: CGFloat = 90
+    static let usernameLabelHeight: CGFloat = 38
+    static let nameLabelYPadding: CGFloat = 8
+    static let nameLabelHeigh: CGFloat = 20
+    static let locationImageSize: CGFloat = 20
+    static let locationImageTrailingPadding: CGFloat = 5
+    static let locationLabelHeigh: CGFloat = 20
+    static let bioLabelHeight: CGFloat = 90
+  }
 
   private let avatarImageView = GFAvatarImageView(frame: .zero)
   private let userNameLabel = GFTitleLabel(textAligment: .left, fontSize: 34)
-  private let nameLabel = GFSecondaryTitleLabel(fontSize: 18)
+  private let nameLabel = GFSecondaryTitleLabel(fontSize: Layout.labelsFontSize)
   private let locationImageView = UIImageView()
-  private let locationLabel = GFSecondaryTitleLabel(fontSize: 18)
+  private let locationLabel = GFSecondaryTitleLabel(fontSize: Layout.labelsFontSize)
   private let bioLabel = GFBodyLabel(textAligment: .left)
 
   private let user: User
@@ -40,7 +55,7 @@ class GFUserInfoVC: UIViewController {
     nameLabel.text = user.name ?? Constants.Texts.emptyString
     locationLabel.text = user.location ?? Constants.Texts.noLocation
     bioLabel.text = user.bio ?? Constants.Texts.noBioAvailable
-    bioLabel.numberOfLines = 3
+    bioLabel.numberOfLines = Layout.bioLabelNumberOfLines
 
     locationImageView.image = Images.locationPin
     locationImageView.tintColor = .secondaryLabel
@@ -58,54 +73,52 @@ class GFUserInfoVC: UIViewController {
   }
 
   private func layoutUI() {
-    let padding: CGFloat = 20
-    let textImagePadding : CGFloat = 12
     locationImageView.translatesAutoresizingMaskIntoConstraints = false
 
     NSLayoutConstraint.activate([
-      avatarImageView.topAnchor.constraint(equalTo: view.topAnchor, constant: padding),
+      avatarImageView.topAnchor.constraint(equalTo: view.topAnchor, constant: Layout.padding),
       avatarImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-      avatarImageView.widthAnchor.constraint(equalToConstant: 90),
-      avatarImageView.heightAnchor.constraint(equalToConstant: 90),
+      avatarImageView.widthAnchor.constraint(equalToConstant: Layout.avatarImageSize),
+      avatarImageView.heightAnchor.constraint(equalToConstant: Layout.avatarImageSize),
 
       userNameLabel.topAnchor.constraint(equalTo: avatarImageView.topAnchor),
       userNameLabel.leadingAnchor.constraint(
         equalTo: avatarImageView.trailingAnchor,
-        constant: textImagePadding
+        constant: Layout.textImagePadding
       ),
       userNameLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-      userNameLabel.heightAnchor.constraint(equalToConstant: 38),
+      userNameLabel.heightAnchor.constraint(equalToConstant: Layout.usernameLabelHeight),
 
-      nameLabel.centerYAnchor.constraint(equalTo: avatarImageView.centerYAnchor, constant: 8),
+      nameLabel.centerYAnchor.constraint(equalTo: avatarImageView.centerYAnchor, constant: Layout.nameLabelYPadding),
       nameLabel.leadingAnchor.constraint(
         equalTo: avatarImageView.trailingAnchor,
-        constant: textImagePadding
+        constant: Layout.textImagePadding
       ),
       nameLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-      nameLabel.heightAnchor.constraint(equalToConstant: 20),
+      nameLabel.heightAnchor.constraint(equalToConstant: Layout.nameLabelHeigh),
 
       locationImageView.bottomAnchor.constraint(equalTo: avatarImageView.bottomAnchor),
       locationImageView.leadingAnchor.constraint(
         equalTo: avatarImageView.trailingAnchor,
-        constant: textImagePadding
+        constant: Layout.textImagePadding
       ),
-      locationImageView.heightAnchor.constraint(equalToConstant: 20),
-      locationImageView.widthAnchor.constraint(equalToConstant: 20),
+      locationImageView.heightAnchor.constraint(equalToConstant: Layout.locationImageSize),
+      locationImageView.widthAnchor.constraint(equalToConstant: Layout.locationImageSize),
 
       locationLabel.centerYAnchor.constraint(equalTo: locationImageView.centerYAnchor),
-      locationLabel.leadingAnchor.constraint(equalTo: locationImageView.trailingAnchor, constant: 5),
+      locationLabel.leadingAnchor.constraint(equalTo: locationImageView.trailingAnchor, constant: Layout.locationImageTrailingPadding),
       locationLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-      locationLabel.heightAnchor.constraint(equalToConstant: 20),
+      locationLabel.heightAnchor.constraint(equalToConstant: Layout.locationLabelHeigh),
 
-      bioLabel.topAnchor.constraint(equalTo: avatarImageView.bottomAnchor, constant: textImagePadding),
+      bioLabel.topAnchor.constraint(equalTo: avatarImageView.bottomAnchor, constant: Layout.textImagePadding),
       bioLabel.leadingAnchor.constraint(equalTo: avatarImageView.leadingAnchor),
       bioLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-      bioLabel.heightAnchor.constraint(equalToConstant: 60)
+      bioLabel.heightAnchor.constraint(equalToConstant: Layout.bioLabelHeight)
     ])
   }
 }
 
-private extension GFUserInfoVC {
+private extension GFUserInfoHeaderVC {
   func downloadImage(avatarUrl: String) {
     NetworkManager.shared.downloadImage(from: avatarUrl) { [weak self] image in
       guard let self = self else { return }
