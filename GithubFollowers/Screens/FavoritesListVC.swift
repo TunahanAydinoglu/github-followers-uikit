@@ -42,6 +42,7 @@ class FavoritesListVC: GFDataLoadingVC {
     tableView.rowHeight = Layout.cellHeight
     tableView.delegate = self
     tableView.dataSource = self
+    tableView.removeExcessCells()
     tableView.register(FavoriteCell.self, forCellReuseIdentifier: FavoriteCell.reuseId)
   }
   
@@ -98,8 +99,6 @@ extension FavoritesListVC: UITableViewDelegate, UITableViewDataSource {
     guard editingStyle == .delete else { return }
     
     let favorite = favorites[indexPath.row]
-    favorites.remove(at: indexPath.row)
-    tableView.deleteRows(at: [indexPath], with: .left)
     PersistenceManager.update(with: favorite, actionType: .remove) { [weak self] error in
       guard let self = self else { return }
       
@@ -109,7 +108,11 @@ extension FavoritesListVC: UITableViewDelegate, UITableViewDataSource {
           message: error.rawValue,
           buttonTitle: Constants.Texts.ok
         )
+        return
       }
+      
+      self.favorites.remove(at: indexPath.row)
+      tableView.deleteRows(at: [indexPath], with: .left)
     }
   }
 }
