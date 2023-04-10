@@ -76,18 +76,36 @@ class FollowerListVC: GFDataLoadingVC {
   
   private func getFollowers(username: String, page: Int) {
     showLoadingView()
-    NetworkManager.shared.getFollowers(for: username, page: page) { [weak self] result in
-      self?.dismissLoadingView()
-      guard let self = self else { return }
-      switch result {
-      case .success(let followers):
+    
+    Task {
+      do {
+        let followers = try await NetworkManager.shared.getFollowers(for: username, page: page)
         self.updateUI(with: followers)
-      case .failure(let error):
-        self.presentGFAlertOnMainThread(title: Constants.Errors.badStuff, message: error.rawValue, buttonTitle: Constants.Texts.ok)
+        dismissLoadingView()
+      } catch {
+        guard let gfError = error as? GFError else {
+          self.presentDefaultError()
+          return
+        }
+        self.presentGFAlert(
+          title: Constants.Errors.badStuff,
+          message: gfError.rawValue,
+          buttonTitle: Constants.Texts.ok
+        )
+        dismissLoadingView()
       }
+      
+      //      guard let followers = try? await NetworkManager.shared.getFollowers(for: username, page: page) else {
+      //        presentDefaultError()
+      //        dismissLoadingView()
+      //        return
+      //      }
+      //
+      //      updateUI(with: followers)
+      //      dismissLoadingView()
     }
   }
-
+  
   private func updateUI(with followers: [Follower]) {
     if followers.count < NetworkManager.perPageCount {
       self.isLastPage = true
@@ -138,10 +156,10 @@ class FollowerListVC: GFDataLoadingVC {
       }
     }
   }
-
+  
   private func addUserToFavorites(user: User) {
     let favorite = Follower(login: user.login, avatarUrl: user.avatarUrl)
-
+    
     PersistenceManager.update(with: favorite, actionType: .add) { [weak self] err in
       guard let self = self else { return }
       if let err = err {
@@ -195,7 +213,7 @@ extension FollowerListVC: UISearchResultsUpdating, UISearchBarDelegate {
       updateData(on: followers)
       return
     }
-
+    
     filteredFollowers = followers
       .filter{$0.login.lowercased().contains(filter.lowercased())}
     updateData(on: filteredFollowers)

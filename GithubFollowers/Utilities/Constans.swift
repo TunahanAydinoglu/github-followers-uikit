@@ -43,6 +43,7 @@ enum Constants{
     static let smtError: String = "Someting went wrong!"
     static let uncompleteError: String = "Unable to complete request"
     static let unableRemove: String = "Unable to remove"
+    static let uncompleteTask: String = "We were unable to complete your task at this time.\nPlease try again."
 
     static let userUrlNotValid: String = "The url attached to this user is invalid"
   }
