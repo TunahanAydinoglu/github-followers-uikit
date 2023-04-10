@@ -23,7 +23,7 @@ class UserInfoVC: UIViewController {
     static let dateHeight: CGFloat = 50
     static let contentHeight: CGFloat = headerHeight + 2*itemHeigh + dateHeight + 5*padding
   }
-
+  
   let scrollView = UIScrollView()
   let contentView = UIView()
   
@@ -32,7 +32,7 @@ class UserInfoVC: UIViewController {
   private let itemViewTwo = UIView()
   private let dateLabel = GFBodyLabel(textAligment: .center)
   
-  var userName: String = Constants.Texts.emptyString
+  var username: String = Constants.Texts.emptyString
   weak var delegate: UserInfoVCDelegate?
   
   override func viewDidLoad() {
@@ -53,14 +53,14 @@ class UserInfoVC: UIViewController {
     )
     navigationItem.rightBarButtonItem = doneButton
   }
-
+  
   private func configureScrollView() {
     view.addSubview(scrollView)
     scrollView.pinToSuperView()
-
+    
     scrollView.addSubview(contentView)
     contentView.pinToSuperView()
-
+    
     NSLayoutConstraint.activate([
       contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
       contentView.heightAnchor.constraint(equalToConstant: Layout.contentHeight)
@@ -148,18 +148,18 @@ extension UserInfoVC: GFFollowerItemVCDelegate {
 // MARK: Network
 private extension UserInfoVC {
   func getUserInfo() {
-    NetworkManager.shared.getUserInfo(for: userName) { [weak self] result in
-      guard let self = self else { return }
-      
-      switch result {
-      case .success(let user):
-        DispatchQueue.main.async {
-          self.configureUIElements(with: user)
+    Task {
+      do {
+        let user = try await NetworkManager.shared.getUserInfo(for: username)
+        configureUIElements(with: user)
+      } catch {
+        guard let gfError = error as? GFError else {
+          presentDefaultError()
+          return
         }
-      case .failure(let error):
-        self.presentGFAlertOnMainThread(
+        presentGFAlert(
           title: Constants.Errors.smtError,
-          message: error.rawValue,
+          message: gfError.rawValue,
           buttonTitle: Constants.Texts.ok
         )
       }

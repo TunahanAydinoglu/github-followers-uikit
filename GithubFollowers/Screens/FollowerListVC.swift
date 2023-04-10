@@ -139,18 +139,20 @@ class FollowerListVC: GFDataLoadingVC {
   
   @objc func addButtonTapped() {
     showLoadingView()
-    
-    NetworkManager.shared.getUserInfo(for: username) { [weak self] result in
-      guard let self = self else { return }
-      self.dismissLoadingView()
-      
-      switch result {
-      case .success(let user):
-        self.addUserToFavorites(user: user)
-      case .failure(let err):
-        self.presentGFAlertOnMainThread(
+    Task {
+      do {
+        let user = try await NetworkManager.shared.getUserInfo(for: username)
+        addUserToFavorites(user: user)
+        dismissLoadingView()
+      } catch {
+        dismissLoadingView()
+        guard let gfError = error as? GFError else {
+          presentDefaultError()
+          return
+        }
+        presentGFAlert(
           title: Constants.Errors.smtError,
-          message: err.rawValue,
+          message: gfError.rawValue,
           buttonTitle: Constants.Texts.ok
         )
       }
@@ -198,7 +200,7 @@ extension FollowerListVC: UICollectionViewDelegate {
     : followers[indexPath.item]
     
     let destVc = UserInfoVC()
-    destVc.userName = follower.login
+    destVc.username = follower.login
     destVc.delegate = self
     let navController = UINavigationController(rootViewController: destVc)
     present(navController, animated: true)
