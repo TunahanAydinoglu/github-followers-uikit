@@ -116,6 +116,9 @@ extension FavoritesListVC: UITableViewDelegate, UITableViewDataSource {
       
       self.favorites.remove(at: indexPath.row)
       tableView.deleteRows(at: [indexPath], with: .left)
+      if self.favorites.isEmpty {
+        self.showEmptyStateView(with: Constants.Texts.noFavorites, in: self.view)
+      }
     }
   }
 }
